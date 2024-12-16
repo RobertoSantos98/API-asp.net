@@ -39,5 +39,19 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var response = await _medicoInterface.Remover(id);
+            return Ok(response);
+        }
+
+        [HttpGet("buscarNome")]
+        public async Task<IActionResult> buscarNome(string nome)
+        {
+            var response = await _medicoInterface.EncontrarPorNome(nome);
+            return Ok(response);
+        }
+
     }
 }

@@ -80,9 +80,64 @@ namespace API.Infrastructure.Repository
             }
         }
 
-        public Task<ResponseModel<Medico>> Remover(Medico medico)
+        public async Task<ResponseModel<Medico>> Remover(int id)
         {
-            throw new NotImplementedException();
+            ResponseModel<Medico> resposta = new ResponseModel<Medico>();
+
+            try
+            {
+                var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.id == id);
+
+                if(medico != null)
+                {
+                    _context.Medicos.Remove(medico);
+                    await _context.SaveChangesAsync();
+
+                    resposta.Mensagem = "O Dado foi removido!";
+                    resposta.Dados = medico;
+                    return resposta;
+                } else
+                {
+                    resposta.Mensagem = "O dado não foi encontrado!";
+                    return resposta;
+                }
+
+
+            }catch(Exception ex)
+            {
+                resposta.Mensagem = ex.Message;
+                resposta.Status = false;
+                return resposta;
+            }
+        }
+
+        public async Task<ResponseModel<List<Medico>>> EncontrarPorNome(string nome)
+        {
+            ResponseModel<List<Medico>> resposta = new();
+
+            try
+            {
+                var medico = await _context.Medicos.Where(m => m.nomecompleto.StartsWith(nome)).ToListAsync();
+                if(medico != null)
+                {
+                    resposta.Dados = medico;
+                    resposta.Mensagem = "O Usuário foi encontrado!";
+                    return resposta;
+
+                } else
+                {
+                    resposta.Mensagem = "O usuário não foi encontrado!";
+                    return resposta;
+
+                }
+
+
+            }catch(Exception ex)
+            {
+                resposta.Mensagem = ex.Message;
+                resposta.Status = false;
+                return resposta;
+            }
         }
     }
 }

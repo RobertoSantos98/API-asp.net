@@ -10,6 +10,8 @@ namespace API.Models
 
         public Task<ResponseModel<Medico>> FindById(int id);
 
-        public Task<ResponseModel<Medico>> Remover(Medico medico);
+        public Task<ResponseModel<Medico>> Remover(int id);
+
+        public Task<ResponseModel<List<Medico>>> EncontrarPorNome(string nome);
     }
 }
