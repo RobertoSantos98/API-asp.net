@@ -6,7 +6,7 @@ namespace API.Infrastructure.Repository
     public class MedicoRepository : IMedicoInterface
     {
 
-        public readonly ConnectionContext _context = new ConnectionContext();
+        public readonly ConnectionContext _context = new();
 
 
 

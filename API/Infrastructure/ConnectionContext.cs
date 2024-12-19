@@ -6,6 +6,8 @@ namespace API.Infrastructure
     public class ConnectionContext : DbContext
     {
         public DbSet<Medico> Medicos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Login> Login { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
