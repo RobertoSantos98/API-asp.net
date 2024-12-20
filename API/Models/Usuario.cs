@@ -24,5 +24,9 @@ namespace API.Models
             this.cpf = cpf;
             this.datanascimento = datanascimento;
         }
+
+        public Usuario()
+        {
+        }
     }
 }

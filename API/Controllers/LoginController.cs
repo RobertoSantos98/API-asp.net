@@ -24,6 +24,13 @@ namespace API.Controllers
 
         }
 
+        [HttpPost("auth")]
+        public async Task<IActionResult> Logar(AuthViewModel auth)
+        {
+            var response = await _repository.Logar(auth);
+            return Ok(response);
+        }
+
 
 
     }

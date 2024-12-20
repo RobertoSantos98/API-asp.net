@@ -1,4 +1,6 @@
-﻿using API.Models;
+﻿using API.Application.Services;
+using API.Application.ViewModels;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Infrastructure.Repository
@@ -31,10 +33,11 @@ namespace API.Infrastructure.Repository
                 else
                 {
                     resposta.Mensagem = "Não foi possivel encontrar esse usuário no nosso sistema!";
+                    resposta.Status = false;
                     return resposta;
                 }
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
                 resposta.Mensagem = ex.InnerException?.Message ?? ex.Message;
                 resposta.Status = false;
@@ -50,6 +53,45 @@ namespace API.Infrastructure.Repository
         public Task<ResponseModel<Login>> Remover()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ResponseModel<Login>> Logar(AuthViewModel auth)
+        {
+            ResponseModel<Login> resposta = new ResponseModel<Login>();
+
+            var Login = new Login(auth.usuario, auth.password);
+
+            try
+            {
+                var dados = await _context.Login.FirstOrDefaultAsync(l => l.login == auth.usuario);
+
+                if (dados == null)
+                {
+                    resposta.Mensagem = "Não foi possivel encontrar usuário no sistema!";
+                }
+
+                if (auth.password == dados.password)
+                {
+                    var token = TokenServices.GenerateToken(new Login());
+                    resposta.Dados = Login;
+                    resposta.Mensagem = token.ToString();
+                    return resposta;
+                }
+                else
+                {
+                    resposta.Mensagem = "A senha não corresponde com o usuario informado!";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = ex.InnerException?.Message ?? ex.Message;
+                resposta.Status = false;
+                return resposta;
+            }
+
         }
     }
 }
