@@ -73,8 +73,10 @@ namespace API.Infrastructure.Repository
                 if (auth.password == dados.password)
                 {
                     var token = TokenServices.GenerateToken(new Login());
-                    resposta.Dados = Login;
+                    resposta.Dados = dados;
+
                     resposta.Mensagem = token.ToString();
+                     
                     return resposta;
                 }
                 else

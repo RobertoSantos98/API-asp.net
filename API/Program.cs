@@ -16,7 +16,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IMedicoInterface, MedicoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<ILoginRepository,  LoginRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
 
 var key = Encoding.ASCII.GetBytes(API.Key.SecretKey);
 
@@ -31,7 +32,6 @@ builder.Services.AddAuthentication(options =>
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
-
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,
@@ -40,7 +40,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Configure server to listen on all network interfaces (0.0.0.0)
+builder.WebHost.UseUrls("http://0.0.0.0:5175", "https://0.0.0.0:7277");
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,7 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

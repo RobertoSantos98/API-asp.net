@@ -25,10 +25,8 @@ namespace API.Application.Services
             var token = tokenHandler.CreateToken(tokenConfig);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return new
-            {
-                token = tokenString
-            };
+            return tokenString;
+           
 
 
         }

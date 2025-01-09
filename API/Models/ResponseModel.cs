@@ -1,4 +1,6 @@
-﻿namespace API.Models
+﻿using API.Application.Services;
+
+namespace API.Models
 {
     public class ResponseModel<T>
     {

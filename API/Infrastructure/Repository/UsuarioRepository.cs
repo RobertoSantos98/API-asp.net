@@ -8,7 +8,7 @@ namespace API.Infrastructure.Repository
         private readonly ConnectionContext _context = new ConnectionContext();
 
 
-        public UsuarioRepository() { }
+        
         public async Task<ResponseModel<Usuario>> Add(Usuario usuario)
         {
             ResponseModel<Usuario> resposta = new();
