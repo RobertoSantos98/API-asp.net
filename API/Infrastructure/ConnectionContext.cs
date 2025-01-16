@@ -9,6 +9,7 @@ namespace API.Infrastructure
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Login> Login { get; set; }
         public DbSet<Consulta> Consulta { get; set; }
+        public DbSet<Agenda> Agenda { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

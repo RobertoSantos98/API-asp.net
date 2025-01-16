@@ -18,6 +18,7 @@ builder.Services.AddScoped<IMedicoInterface, MedicoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
+builder.Services.AddScoped<IAgendaRepository, AgendaRepository>();
 
 var key = Encoding.ASCII.GetBytes(API.Key.SecretKey);
 

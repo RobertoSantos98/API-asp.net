@@ -1,9 +1,11 @@
 ﻿using API.Application.ViewModels;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    
     [Route("api/consulta")]
     [ApiController]
     public class ConsultaController : ControllerBase
@@ -15,6 +17,7 @@ namespace API.Controllers
             _consulta = consulta;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> ListarConsultas()
         {
@@ -22,6 +25,7 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("paciente/{id}")]
         public async Task<IActionResult> ListarPorId(int id)
         {
@@ -36,6 +40,7 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CriarConsulta(ConsultaViewModel consulta)
         {
