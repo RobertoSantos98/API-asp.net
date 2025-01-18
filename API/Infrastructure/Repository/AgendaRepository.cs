@@ -1,4 +1,5 @@
 ﻿using API.Application.ViewModels;
+using API.Domain.DTOs;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace API.Infrastructure.Repository
     {
         private readonly ConnectionContext _context = new();
 
-        public async Task<ResponseModel<List<object>>> ListarAgenda()
+        public async Task<ResponseModel<List<AgendaDTO>>> ListarAgenda()
         {
-            ResponseModel<List<object>> resposta = new();
+            ResponseModel<List<AgendaDTO>> resposta = new();
 
             try
             {
@@ -24,7 +25,7 @@ namespace API.Infrastructure.Repository
                     return resposta;
                 }
 
-                var listagemFinal = new List<object>();
+                var listagemFinal = new List<AgendaDTO>();
 
                 foreach (var agenda in response)
                 {
@@ -32,12 +33,12 @@ namespace API.Infrastructure.Repository
 
                     if(idConsulta == null)
                     {
-                        listagemFinal.Add(new
+                        listagemFinal.Add(new AgendaDTO
                         {
                             id = agenda.id,
                             data = agenda.data.ToString("dd/MM/yyyy"),
                             hora = agenda.horario.ToString("HH:mm"),
-                            disponivel = agenda.disponivel,
+                            disponivel = true,
                             medico = "Disponível"
                         }); ;
                     }
@@ -45,20 +46,23 @@ namespace API.Infrastructure.Repository
                     {
                         var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.id == idConsulta.medico_id);
 
-                        listagemFinal.Add(new
+                        if(medico != null)
                         {
-                            id = agenda.id,
-                            data = agenda.data.ToString("dd/MM/yyyy"),
-                            hora = agenda.horario.ToString("HH:mm"),
-                            disponivel = agenda.disponivel,
-                            medico = medico.nomecompleto
-                        });
-
+                            listagemFinal.Add(new AgendaDTO
+                            {
+                                id = agenda.id,
+                                data = agenda.data.ToString("dd/MM/yyyy"),
+                                hora = agenda.horario.ToString("HH:mm"),
+                                disponivel = false,
+                                medico = medico.nomecompleto
+                            });
+                        }
                     }
                 }
 
+                var listaOrdenada = listagemFinal.OrderBy(item => item.id).ToList();
 
-                resposta.Dados = listagemFinal;
+                resposta.Dados = listaOrdenada;
                 resposta.Mensagem = "Todos os dados foram recuperados!";
                 return resposta;
 
@@ -129,6 +133,51 @@ namespace API.Infrastructure.Repository
                 return resposta;
             }
         }
+
+        //public async Task<ResponseModel<List<object>>> ListarTodaAgenda()
+        //{
+        //    ResponseModel<List<object>> resposta = new();
+
+        //    try
+        //    {
+        //        var hoje = DateOnly.FromDateTime(DateTime.Today);
+
+        //        var response = await _context.Agenda.Where(a => a.data >= hoje).ToListAsync();
+
+        //        var ListagemFinal = new List<object>();
+
+        //        if(response == null)
+        //        {
+        //            resposta.Mensagem = "Nenhum dado encontrado!";
+        //            resposta.Status = false;
+        //            return resposta;
+        //        }
+
+        //        foreach(var consulta in response)
+        //        {
+        //            var verificarConsulta = await _context.Consulta.Where(c => c.id == consulta.id).ToListAsync();
+
+        //            if(verificarConsulta != null)
+        //            {
+
+        //            }
+
+
+        //        }
+
+
+
+        //        return ListagemFinal;
+
+
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        resposta.Mensagem = e.Message;
+        //        resposta.Status = false;
+        //        return resposta;
+        //    }
+        //}
 
     }
 }

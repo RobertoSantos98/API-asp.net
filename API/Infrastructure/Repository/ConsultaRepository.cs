@@ -63,9 +63,12 @@ namespace API.Infrastructure.Repository
         {
             ResponseModel<List<object>> resposta = new();
 
+            var hoje = DateTime.Today.ToUniversalTime();
+
+
             try
             {
-                var consultas = await _context.Consulta.Where(c => c.paciente_id == id).ToListAsync();
+                var consultas = await _context.Consulta.Where(c => c.paciente_id == id && c.data_hora >= hoje).ToListAsync();
 
                 if (consultas == null || !consultas.Any())
                 {

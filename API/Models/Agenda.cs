@@ -8,7 +8,7 @@ namespace API.Models
         public int id { get; private set; }
         public DateOnly data {  get; private set; }
         public TimeOnly horario { get; private set; }
-        public bool disponivel { get; private set; }
+        public bool disponivel { get; set; }
         public int? consulta_id { get; set; }
 
         public Agenda() { }

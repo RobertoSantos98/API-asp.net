@@ -25,7 +25,7 @@ namespace API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+
         [HttpGet("paciente/{id}")]
         public async Task<IActionResult> ListarPorId(int id)
         {
